@@ -11,7 +11,7 @@
 - Keyboard Support
 - Minimal Skeumorphic design
 
-> Note: Default font may not be availible on all devices, and is not uploaded to this repo for licensing reasons. Please see dafont.com > DS Digital to download on your system.
+> Note: Default font may not be availible on all devices. Please see dafont.com > DS Digital to download on your system. Fallback fonts are set, but do not satisfy the visual intended aesthetic.
 
 ---
 
