@@ -18,10 +18,10 @@
 ## Version 0.4
 
 ### Bug Fixes
-- Fixed calculation/order of operations issues
-- Doesn't Do math properly
-- Continuing the operation after Backspace doesn't work
-- Switching between double negative and change to positive doesn't work properly.
+- [x] Fixed calculation/order of operations issues
+- [x] Doesn't Do math properly
+- [x] Continuing the operation after Backspace doesn't work
+- [x] Switching between double negative and change to positive doesn't work properly.
 
 ---
 
@@ -39,9 +39,9 @@
 ### Bugs
 - [x] Doesn't Do math properly
 - [x] Continuing the operation after Backspace doesn't work
-- [] Does not support decimal numbers
-- [] No button for backspace
-- [] No history
-- [] No memory
+- [ ] Does not support decimal numbers
+- [ ] No button for backspace
+- [ ] No history
+- [ ] No memory
 - [x] Switching between double negative and change to positive doesn't work properly. (call .back()?)
 - [x] Calculation/Order of operations: The result is calculated each time an operator is pressed, thus, each new number operates on the previous result, thus the only order of operations, is the accumulated value, operated upon by the recently types operator and value. Basically, the calculator performs only the most basic of mathematatic operations.
