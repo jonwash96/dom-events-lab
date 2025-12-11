@@ -2,7 +2,6 @@ const calculator = {
     target: document.getElementById('calculator'),
     buttons: document.querySelectorAll('div.button'),
     stdOps: new RegExp(/\+|\-|\/|\*/),
-    noSub: new RegExp(/\+|\/|\*/),
     mode: 'init', // modes: init, calculate, operate, result
     operation: {
         accumulator:null,
@@ -10,7 +9,8 @@ const calculator = {
         array: [],
         set(value,replace=0) {
             if (replace>0) {this.array.splice(-replace,replace,...value) 
-            } else {this.array.push(...value)};
+            } else {/string|number/.test(typeof value) ? this.array.push(value) : this.array.push(...value)};
+        console.log("operation.set("+value+","+replace+")");
         },
         get(option) {
             let result;
@@ -22,7 +22,7 @@ const calculator = {
         clear() {this.array = [];this.accumulator = 0;this.operator = null;console.log("operation.clear()")},
         back(option) {
             console.log("operation.back("+option+")");
-            if (/l/.test(option)) { // literal backspace (DO NOT USE)
+            if (/l/.test(option)) { // literal backspace (Unfinished. DO NOT USE)
                 const last = this.array.pop();
                 calculator.stdOps.test(last) && (this.operator = null);
             } else {
@@ -35,7 +35,7 @@ const calculator = {
     },
     currentNumber: {
         value: [0],
-        set(value) {(/\d+/.test(value)) && this.value.push(Number(value))},
+        set(value) {(/\d+/.test(value)) && this.value.push(Number(value)); console.log("currentNumber.set("+value+")");},
         get(option) {
             let result;
             switch (option) {
@@ -45,7 +45,7 @@ const calculator = {
             }; return result;
         },
         back() {this.value.pop(); console.log("currentNumber.back()")},
-        clear(zero) {this.value = [];console.log("currentNumber.clear("+zero+")")}
+        clear() {this.value = [];console.log("currentNumber.clear()")}
     },
     display: {
         target: document.querySelector('.display'),
@@ -81,7 +81,7 @@ const calculator = {
         let value = e.key || e.target.innerText;
         console.log("handleButtonPress("+value+") in Mode: ", this.mode);
 
-        // if (/\d|\/|\*|\+|-|m|c|Backspace|Enter|Arrow.*/.test(e.key))
+        // if (/\d|\/|\*|\+|-|^m$|^c$|Backspace|Enter|Arrow.*/.test(e.key))
 
         // * Handle big numbers
         if (!/Backspace|Enter/.test(value) && this.currentNumber.get('length')>9) {this.display.render('big-too-big');return}
@@ -107,40 +107,36 @@ const calculator = {
             /result|operate/.test(this.mode) && this.currentNumber.clear();
             this.mode = 'calculate';
             this.currentNumber.set(value);
-        } else { 
+        } else if (this.stdOps.test(value)) { // * Handle Accumulation (operators)
+            this.operation.set(this.currentNumber.get());
+            this.operation.accumulator = eval(this.operation.get()) // THIS SIMPLE LINE OF CODE IS THE LINE TO RULE THEM ALL. MAYBE ITS THE ALE TALKING, OR MAYBE I'VE GENUINELY ARRIVED AT AN EPIPHINY OF MATHEMATICAL ENLIGHTENMENT.
+            this.operation.set(value);
+        } else { // * Handle non-digits
             console.log("Handle non-digit");
             switch (value) {
                 case 'c':
-                case 'C': {this.operation.clear(); this.currentNumber.clear(0)}; break;
+                case 'C': {this.operation.clear(); this.currentNumber.clear()}; break;
+                case 'n': {this.operation.operator = '+'; this.operation.set('+',1); this.display.render('operate'); return}; break;
                 case 'Backspace': {
+                    if (/result/.test(this.mode)) {this.operation.clear(); this.currentNumber.clear(); ;}
                     this.currentNumber.get('sum')>0 ?
-                        this.currentNumber.back() :
-                        this.operation.back();
+                    this.currentNumber.back() :
+                    this.operation.back();
                 }; break;
                 case 'Enter':
-                case '=': this.mode = 'result';
-                default :{
-                    switch (this.operation.operator) { // * Accumulate
-                        case 'n': {value = '+'}; break;
-                        case '+': {this.operation.accumulator += this.currentNumber.get()}; break;
-                        case '-': {this.operation.accumulator -= this.currentNumber.get()}; break;
-                        case '*': {this.operation.accumulator *= this.currentNumber.get()}; break;
-                        case '/': {this.operation.accumulator /= this.currentNumber.get()}; break;
-                        default: {this.operation.accumulator = this.currentNumber.get()}; break;
-                    }
-                };
-                if (/\=/.test(value)) {
+                case '=': {
+                    this.mode = 'result';
+                    this.operation.set(this.currentNumber.get());
+                    this.operation.accumulator = eval(this.operation.get());
                     this.operation.operator = '='; 
-                    this.operation.set([this.currentNumber.get(),'=',this.operation.accumulator])
                     this.display.render('result');
                     return;
-                }
-            }
-        }
+                }; break;
+            };
+        };
 
-        if (this.stdOps.test(value) | /C/.test(value)) { // * Set operator variable
+        if (this.stdOps.test(value) | /^C$/i.test(value)) { // * Set operator variable
             this.stdOps.test(value) && (this.operation.operator = value); // Sets only for operators
-            !/C/.test(value) && this.operation.set([this.currentNumber.get(), value]);
             this.mode = 'operate'; // When mode == operate; the next expected value is a number
             this.display.render('operate'); // render content to the DOM (handled differently when operator is pressed)
         } else {this.display.render()};
@@ -151,9 +147,20 @@ function init() {
     calculator.display.render();
     calculator.buttons.forEach(btn=>btn.addEventListener('click', calculator.handleButtonPress.bind(calculator)));
     document.addEventListener('keypress', (e) => {
-        if (/\d|\/|\*|\+|-|m|c|Backspace|Enter|Arrow.*/.test(e.key)) {
+        if (/\d|\/|\*|\+|-|^m$|^c$|Backspace|Enter|Arrow.*/.test(e.key)) {
             calculator.handleButtonPress(e);
         }
     });
     calculator.mode = 'operate';
 }; init()
+
+
+// default :{ // THIS IS A MODE. I KNOW NOT WHICH MODE, BUT THIS IS A MODE. LET;S CALL IT COMPOUND MODE. I DON'T REALLY KNOW WHAT IT'S USE CASE IS, BUT THIS DOES SOMETHING DIFFERENT THAN YOU MIGHT EXPECT, BUT THAT SOMEONE OUT THERE MIGHT HAVE A USE FOR. ESPECIALLY IF WE WERE TO COMBINE IT WITH ADDITIONAL LOGIC, TO ADD IN A CONMOUNDER OF SOME SORT, WHICH MIGHT BE USEFULL, MORESO IN REGARDS TO RECORDKEEPING IN THE MOMENT OR SOMETHING LIKE THAT
+//                     switch (this.operation.operator) { // * Accumulate
+//                         case 'n': {value = '+'}; break;
+//                         case '+': {this.operation.accumulator += this.currentNumber.get()}; break;
+//                         case '-': {this.operation.accumulator -= this.currentNumber.get()}; break;
+//                         case '*': {this.operation.accumulator *= this.currentNumber.get()}; break;
+//                         case '/': {this.operation.accumulator /= this.currentNumber.get()}; break;
+//                         default: {this.operation.accumulator = this.currentNumber.get()}; break;
+//                     }
