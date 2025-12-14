@@ -2,8 +2,8 @@
 
 ---
 
-After receiving feedback on my first submittion about my use of eval(), and my divergence from the lesson, I decided to complete the simple 2-Operand version, so as to not loose sight of the objective— but with the added challenge of using the most concise possible expressions (whithin reason), while still maintaining readable code, and a solid UX.
-> This 2-Operand version is over 100 lines of code shorter than my first version.
+After receiving feedback on my first submittion about my use of eval(), and my divergence from the lesson, I decided to complete the simple 2-Operand version, so as to not loose sight of the objective— but with the added challenge of using the most concise possible expressions (within reason), while still maintaining readable code, and a solid UX.
+> This 2-Operand version is over 100 lines of code shorter than the first version.
 
 ### Features
 
@@ -13,8 +13,8 @@ After receiving feedback on my first submittion about my use of eval(), and my d
 - Calculate result on any seccond operator keypress (neither a bug nor real feature)
 
 ### Technical Features
-- Code Uses event bubling instead of dedicated listeners
+- Code uses event bubbling instead of dedicated listeners
 - Uses recusion
 - Uses the nullish coalescing operator
 
-> Note: Default font may not be availible on all devices. Please see dafont.com > DS Digital to download on your system. Fallback fonts are set, but do not satisfy the visual intended aesthetic.
+> Note: Default font may not be availible on all devices. Please see dafont.com > DS Digital to download on your system. Fallback fonts are set, but do not satisfy the intended visual aesthetic.

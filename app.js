@@ -13,7 +13,7 @@ let operation = [[]];
 // FUNCTIONS
 function handleButtonPress(e) {
     let value = e.target?.textContent || e; // Distinguish between button press and '=' recursion
-    if (!/^[\dC\+-\/\*=]$/.test(value)) return; // Ignore non-button events
+    if (!/^[\dC\+\-\/\*\=]$/.test(value)) return; // Ignore non-button events
     switch (value) {
         case 'C': {operation[1] ? operation.splice(-1,1) : reset('f')}; break; // If 2 nums: remove last, otherwise reset
         case '=': {handleButtonPress(operator)}; break; // Recurse this function, passing in the current operator, registering a seccond operator press
@@ -26,7 +26,7 @@ function handleButtonPress(e) {
         default: {operation[1] ? operation[1].push(value) : operation[0].push(value); render('number')};
     };
         // Clear state after render result. Render only the current operation the first time 
-        if (/^[\+-\/\*]$/.test(value)) {
+        if (/^[\+\-\/\*]$/.test(value)) {
             if (operation[1]) {reset();
             } else {render('operator'); operation.push([])};
         };
@@ -44,7 +44,7 @@ function render(option) {
         default: {value = option; displayOp.textContent = '='}
     }
     display.textContent = value;
-    operator ?? (displayOp.textContent = '');
+    operator ?? (displayOp.textContent = ''); // This basically operates like a toggle since the calculator only has 2 states, and '=' isn't an operator
 }
 
 render(0);
