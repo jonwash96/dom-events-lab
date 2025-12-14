@@ -1,5 +1,7 @@
 # Basic Calculator | DOM Events Lab
 
+![calculator image](/main_thumbnail.png)
+
 ---
 
 ### Features
@@ -12,6 +14,19 @@
 - Minimal Skeumorphic design
 
 > Note: Default font may not be availible on all devices. Please see dafont.com > DS Digital to download on your system. Fallback fonts are set, but do not satisfy the visual intended aesthetic.
+
+---
+
+## Version 0.4.1
+> Added branch 'basic' for simple 2-Operand version to align with course objectives.
+### Security Update
+- Added a safeEval() wrapper function to prevent unsafe code from being injected into & evaluated by eval(). (Lines 114 & 140)
+
+### Feature Updates
+- Now supports negative numbers
+
+### Bug Fixes 
+- Fixed switching operators vs double negative collisions
 
 ---
 

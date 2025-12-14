@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap'); */
 @font-face {
     font-family: "DS-Digital";
     src:
@@ -32,6 +32,8 @@ body {
     border-left: 2px solid #000c;
     border-right: 2px solid #fff2;
     border-bottom: 2px solid #fff2;
+    overflow: scroll;
+    scrollbar-width: none;
 
     display: grid;
     grid-template-areas: "mem operation" "operator number";
