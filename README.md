@@ -1,4 +1,6 @@
-# Basic Calculator | DOM Events Lab
+# PEMDAS Calculator | DOM Events Lab
+
+> Please see branch [basic](https://github.com/jonwash96/dom-events-lab/tree/basic) for the immediate-execution verson that aligns with course objectives.
 
 ![calculator image](/main_thumbnail.png)
 
@@ -13,19 +15,20 @@
 - Keyboard Support
 - Minimal Skeumorphic design
 
-> Note: Default font may not be availible on all devices. Please see dafont.com > DS Digital to download on your system. Fallback fonts are set, but do not satisfy the visual intended aesthetic.
+> Note: Default font may not be availible on all devices. Please see dafont.com > DS Digital to download on your system. Fallback fonts are set, but do not satisfy the intended visual aesthetic.
 
 ---
 
 ## Version 0.4.1
 > Added branch 'basic' for simple 2-Operand version to align with course objectives.
-### Security Update
-- 🔐 Added a safeEval() wrapper function to prevent unsafe code from being injected into & evaluated by eval(). (Lines 114 & 140)
 
-### Feature Updates
-- ✅ Now supports negative numbers
+### 🔐 Security Update
+- Added a safeEval() wrapper function to prevent unsafe code from being injected into & evaluated by eval(). (Lines 114 & 140)
 
-### Bug Fixes 
+### ✅ Feature Updates
+- Now supports negative numbers
+
+### ❎ Bug Fixes 
 - [x] Fixed: switching operators vs double negative collisions
 
 ---
@@ -33,7 +36,7 @@
 ## Version 0.4
 
 ### Bug Fixes
-- [x] Fixed: calculation/order of operations issues
+- [x] Fixed: Doesn't handle order of operations
 - [x] Fixed: doesn't Do math properly
 - [x] Fixed: Continuing the operation after Backspace doesn't work
 - [x] Fixed: Switching between double negative and change to positive doesn't work properly.
@@ -52,11 +55,11 @@
 - Minimal Skeumorphic design
 
 ### Bugs
-- [x] Doesn't Do math properly
+- [x] Doesn't handle order of operations
+- [ ] Missing **P**arenthesis & **E**xponents for full PEMDAS support
 - [x] Continuing the operation after Backspace doesn't work
 - [ ] Does not support decimal numbers
 - [ ] No button for backspace
 - [ ] No history
 - [ ] No memory
 - [x] Switching between double negative and change to positive doesn't work properly. (call .back()?)
-- [x] Calculation/Order of operations: The result is calculated each time an operator is pressed, thus, each new number operates on the previous result, thus the only order of operations, is the accumulated value, operated upon by the recently types operator and value. Basically, the calculator performs only the most basic of mathematatic operations.
