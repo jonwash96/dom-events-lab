@@ -11,40 +11,40 @@ let operator = null;
 let operation = [[]];
 
 // FUNCTIONS
-function handleButtonPress(e) {
-    let value = e.target?.textContent || e; // Distinguish between button press and '=' recursion
+function handleButtonPress(e) { 
+    let value = e.target?.textContent || e; // Distinguish between button press and '=' recursion; Declare op
     if (!/^[\dC\+\-\/\*\=]$/.test(value)) return; // Ignore non-button events
-    switch (value) {
-        case 'C': {operation[1] ? operation.splice(-1,1) : reset('f')}; break; // If 2 nums: remove last, otherwise reset
-        case '=': {handleButtonPress(operator)}; break; // Recurse this function, passing in the current operator, registering a seccond operator press
-        // For operators: Push value the first time (it was an operator button press); Evaluate the seccond time (called by '=' press)
-        case '+': {operation[1] ? render(num(operation[0]) + num(operation[1])) : operator = value}; break;
-        case '-': {operation[1] ? render(num(operation[0]) - num(operation[1])) : operator = value}; break;
-        case '*': {operation[1] ? render(num(operation[0]) * num(operation[1])) : operator = value}; break;
-        case '/': {operation[1] ? render(num(operation[0]) / num(operation[1])) : operator = value}; break;
-        // For numbers: push to first or seccond array
-        default: {operation[1] ? operation[1].push(value) : operation[0].push(value); render('number')};
-    };
-        // Clear state after render result. Render only the current operation the first time 
-        if (/^[\+\-\/\*]$/.test(value)) {
-            if (operation[1]) {reset();
-            } else {render('operator'); operation.push([])};
+    if (/^[\+\-\/\*\=]$/.test(value)) { // * Accumulate
+        switch (operator) { // For operators: Accumulate with the previous operator & set the new operator
+            case '+': { operation[1] && accumulate(num(operation[0]) + num(operation[1])) } break;
+            case '-': { operation[1] && accumulate(num(operation[0]) - num(operation[1])) } break;
+            case '*': { operation[1] && accumulate(num(operation[0]) * num(operation[1])) } break;
+            case '/': { operation[1] && accumulate(num(operation[0]) / num(operation[1])) } break;
         };
+    };
+    switch (value) {
+        case 'C': { operation[1] ? (operation.splice(-1,1,[]) && render('operator')) : reset('full') }; break; // If 2 nums: remove last, otherwise reset
+        case '=': { operator = value; render(num(operation[0])); reset() } break;
+        default: { // * For any operator press; after accumulation, set the new operator & render. Soft reset operator is '='
+            if (/^[\+\-\/\*]$/.test(value)) {!operation[1] && operation.push([]); operator = value; render('operator')};
+            // * For numbers: push to first or seccond array
+            if (/\d+/.test(value)) {operation[1] ? operation[1].push(value) : operation[0].push(value); render('number')} }
+    }
 };
 
-// FUNCTIONS
 function num(val) {return Array.isArray(val) ? Number(val.join('')) : Number(val)};
-function reset(option) {operator = null; operation = [[]]; /^f$/.test(option) && render(0)}; // The 'f' option re-render's the display with 0
+function reset(full) {operator = null; operation = [[]]; full && render(0)}; // The 'f' option re-render's the display with 0
+function accumulate(accumulated) {operation = [[accumulated],[]]}; // While !'C'; continue to accumulate the new number 
 
 function render(option) {
-    let value;
+    let value; display.style.opacity = 1;
     switch (option) {
         case 'number': operation[1] ? value = num(operation[1]) : value = num(operation[0]); break;
-        case 'operator': {value = num(operation[0]); displayOp.textContent = operator}; break;
+        case 'operator': {value = num(operation[0]); displayOp.textContent = operator; display.style.opacity = 0.5}; break;
         default: {value = option; displayOp.textContent = '='}
     }
     display.textContent = value;
-    operator ?? (displayOp.textContent = ''); // This basically operates like a toggle since the calculator only has 2 states, and '=' isn't an operator
+    operator ?? (displayOp.textContent = ''); // If operator is null, then don't render anything at the operator position
 }
 
 render(0);

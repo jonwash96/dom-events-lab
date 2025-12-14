@@ -32,6 +32,7 @@ body {
     border-left: 2px solid #000c;
     border-right: 2px solid #fff2;
     border-bottom: 2px solid #fff2;
+    overflow-x: scroll;
 
     display: grid;
     grid-template-areas: "mem operation" "operator number";
